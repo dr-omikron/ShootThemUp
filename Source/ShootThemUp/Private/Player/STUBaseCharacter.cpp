@@ -5,12 +5,16 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/Controller.h"
+#include "GameFramework/SpringArmComponent.h"
 
 ASTUBaseCharacter::ASTUBaseCharacter(): CameraComponent(nullptr)
 {
     PrimaryActorTick.bCanEverTick = true;
+    SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("Spring Arm Component");
+    SpringArmComponent->SetupAttachment(GetRootComponent());
+    SpringArmComponent->bUsePawnControlRotation = true;
     CameraComponent = CreateDefaultSubobject<UCameraComponent>("Camera Component");
-    CameraComponent->SetupAttachment(GetRootComponent());
+    CameraComponent->SetupAttachment(SpringArmComponent);
 }
 
 void ASTUBaseCharacter::BeginPlay()

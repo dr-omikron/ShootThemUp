@@ -5,6 +5,7 @@
 #include "STUBaseCharacter.generated.h"
 
 
+class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
@@ -25,9 +26,13 @@ protected:
     void Move(const FInputActionValue& Value);
     void Look(const FInputActionValue& Value);
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-    UCameraComponent* CameraComponent;
 private:
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
+    UCameraComponent* CameraComponent;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
+    USpringArmComponent* SpringArmComponent;
+    
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     UInputMappingContext* STUMappingContext;
 
