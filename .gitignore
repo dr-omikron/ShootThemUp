@@ -1,0 +1,9 @@
+.vs
+.idea
+*.vsconfig
+*.sln
+DerivedDataCache/
+Intermediate/
+Saved/
+Binaries/
+Build/
