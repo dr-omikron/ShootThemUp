@@ -8,18 +8,23 @@ public class ShootThemUp : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
+		PublicDependencyModuleNames.AddRange(new string[] 
+		{ 
+			"Core", 
+			"CoreUObject", 
+			"Engine", 
+			"InputCore", 
+			"EnhancedInput" 
+		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 		
-		PublicIncludePaths.AddRange(new string[] { "ShootThemUp/Public/Player", "ShootThemUp/Public/Components", "ShootThemUp/Public/Development" });
-
-		// Uncomment if you are using Slate UI
-		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
-		
-		// Uncomment if you are using online features
-		// PrivateDependencyModuleNames.Add("OnlineSubsystem");
-
-		// To include OnlineSubsystemSteam, add it to the plugins section in your uproject file with the Enabled attribute set to true
+		PublicIncludePaths.AddRange(new string[]
+		{
+			"ShootThemUp/Public/Player", 
+			"ShootThemUp/Public/Components", 
+			"ShootThemUp/Public/Development",
+			"ShootThemUp/Public/Weapon"
+		});
 	}
 }

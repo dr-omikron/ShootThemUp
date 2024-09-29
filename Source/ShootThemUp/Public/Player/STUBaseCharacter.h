@@ -5,6 +5,7 @@
 #include "STUBaseCharacter.generated.h"
 
 
+class ASTUBaseWeapon;
 class UTextRenderComponent;
 class USTUHeathComponent;
 class USpringArmComponent;
@@ -82,8 +83,12 @@ private:
     UPROPERTY(EditDefaultsOnly, Category = "Animation", meta = (AllowPrivateAccess = "true"))
     UAnimMontage* DeathAnimation;
 
+    UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
+    TSubclassOf<ASTUBaseWeapon> WeaponClass;
+
     bool bWantsToRun;
     bool bIsMovingForward;
 
     void OnDeath();
+    void SpawnWeapon() const;
 };
