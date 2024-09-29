@@ -5,6 +5,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "STUCharacterMovementComponent.h"
+#include "STUHeathComponent.h"
+#include "Components/TextRenderComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 
@@ -20,17 +22,23 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer
     SpringArmComponent->bUsePawnControlRotation = true;
     CameraComponent = CreateDefaultSubobject<UCameraComponent>("Camera Component");
     CameraComponent->SetupAttachment(SpringArmComponent);
+    HeathComponent = CreateDefaultSubobject<USTUHeathComponent>("Heath Component");
+    HealthTextComponent = CreateDefaultSubobject<UTextRenderComponent>("Health Text Component");
+    HealthTextComponent->SetupAttachment(GetRootComponent());
 }
 
 void ASTUBaseCharacter::BeginPlay()
 {
     Super::BeginPlay();
-    
+    check(HeathComponent);
+    check(HealthTextComponent);
 }
 
 void ASTUBaseCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
+    const float Health = HeathComponent->GetHeath();
+    HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
 }
 
 void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

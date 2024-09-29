@@ -5,6 +5,8 @@
 #include "STUBaseCharacter.generated.h"
 
 
+class UTextRenderComponent;
+class USTUHeathComponent;
 class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
@@ -40,7 +42,13 @@ private:
 
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
     USpringArmComponent* SpringArmComponent;
-    
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
+    USTUHeathComponent* HeathComponent;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
+    UTextRenderComponent* HealthTextComponent;
+
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     UInputMappingContext* STUMappingContext;
 
