@@ -30,6 +30,12 @@ public:
     float GetMovementDirection() const;
 
 protected:
+    UFUNCTION()
+    void OnHealthChanged(float Health) const;
+    
+    UFUNCTION()
+    void OnGroundLanded(const FHitResult& Hit);
+    
     virtual void BeginPlay() override;
     void Move(const FInputActionValue& Value);
     void Look(const FInputActionValue& Value);
@@ -49,21 +55,35 @@ private:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
     UTextRenderComponent* HealthTextComponent;
 
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
     UInputMappingContext* STUMappingContext;
 
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
     UInputAction* JumpAction;
 
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
     UInputAction* SprintAction;
 
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
     UInputAction* MoveAction;
 
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
     UInputAction* LookAction;
+
+    UPROPERTY(EditAnywhere, Category = "Damage", meta = (AllowPrivateAccess = "true"))
+    FVector2D LandedDamageVelocity;
+
+    UPROPERTY(EditAnywhere, Category = "Damage", meta = (AllowPrivateAccess = "true"))
+    FVector2D LandedDamage;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Damage", meta = (AllowPrivateAccess = "true"))
+    float LifeSpanOnDeath;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Animation", meta = (AllowPrivateAccess = "true"))
+    UAnimMontage* DeathAnimation;
 
     bool bWantsToRun;
     bool bIsMovingForward;
+
+    void OnDeath();
 };

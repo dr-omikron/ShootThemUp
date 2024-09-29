@@ -7,12 +7,18 @@
 #include "STUCharacterMovementComponent.h"
 #include "STUHeathComponent.h"
 #include "Components/TextRenderComponent.h"
+#include "Engine/DamageEvents.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogBaseCharacter, All, All)
 
 ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer)
     : Super(ObjectInitializer.SetDefaultSubobjectClass<USTUCharacterMovementComponent>(ACharacter::CharacterMovementComponentName)),
     CameraComponent(nullptr),
+    LandedDamageVelocity(900.f, 1200.f),
+    LandedDamage(10.f, 100.f),
+    LifeSpanOnDeath(5.f),
     bWantsToRun(false),
     bIsMovingForward(false)
 {
@@ -32,18 +38,24 @@ void ASTUBaseCharacter::BeginPlay()
     Super::BeginPlay();
     check(HeathComponent);
     check(HealthTextComponent);
+    check(GetCharacterMovement());
+    OnHealthChanged(HeathComponent->GetHealth());
+    HeathComponent->OnDeath.AddUObject(this, &ASTUBaseCharacter::OnDeath);
+    HeathComponent->OnHealthChange.AddUObject(this, &ASTUBaseCharacter::OnHealthChanged);
+    LandedDelegate.AddDynamic(this, &ASTUBaseCharacter::OnGroundLanded);
 }
 
 void ASTUBaseCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-    const float Health = HeathComponent->GetHeath();
-    HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
 }
 
 void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+    check(PlayerInputComponent);
+
     if (const APlayerController* PlayerController = Cast<APlayerController>(GetController()))
     {
         if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
@@ -100,7 +112,6 @@ void ASTUBaseCharacter::OnEndSprint()
     bWantsToRun = false;
 }
 
-
 bool ASTUBaseCharacter::IsSprinting() const
 {
     return bWantsToRun && bIsMovingForward && !GetVelocity().IsZero();
@@ -114,4 +125,30 @@ float ASTUBaseCharacter::GetMovementDirection() const
     const auto CrossProduct = FVector::CrossProduct(GetActorForwardVector(), VelocityNormal);
     const auto Degrees = FMath::RadiansToDegrees(AngleBetween);
     return  CrossProduct.IsZero() ? Degrees : Degrees * FMath::Sign(CrossProduct.Z);
+}
+
+void ASTUBaseCharacter::OnHealthChanged(const float Health) const
+{
+    HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
+}
+
+void ASTUBaseCharacter::OnGroundLanded(const FHitResult& Hit)
+{
+    const auto FallVelocityZ = -GetVelocity().Z;
+    UE_LOG(LogBaseCharacter, Display, TEXT("On landed: %f"), FallVelocityZ);
+    if(FallVelocityZ < LandedDamageVelocity.X) return;
+    const float FinalDamage = FMath::GetMappedRangeValueClamped(LandedDamageVelocity, LandedDamage, FallVelocityZ);
+    UE_LOG(LogBaseCharacter, Display, TEXT("Final Damage: %f"), FinalDamage);
+    TakeDamage(FinalDamage, FDamageEvent{}, nullptr, nullptr);
+}
+
+void ASTUBaseCharacter::OnDeath()
+{
+    PlayAnimMontage(DeathAnimation);
+    GetCharacterMovement()->DisableMovement();
+    SetLifeSpan(LifeSpanOnDeath);
+    if(Controller)
+    {
+        Controller->ChangeState(NAME_Spectating);
+    }
 }
