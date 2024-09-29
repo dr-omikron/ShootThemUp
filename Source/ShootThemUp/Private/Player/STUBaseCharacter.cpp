@@ -4,10 +4,15 @@
 #include "Engine/LocalPlayer.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "STUCharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 
-ASTUBaseCharacter::ASTUBaseCharacter(): CameraComponent(nullptr)
+ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer)
+    : Super(ObjectInitializer.SetDefaultSubobjectClass<USTUCharacterMovementComponent>(ACharacter::CharacterMovementComponentName)),
+    CameraComponent(nullptr),
+    bWantsToRun(false),
+    bIsMovingForward(false)
 {
     PrimaryActorTick.bCanEverTick = true;
     SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("Spring Arm Component");
@@ -45,13 +50,16 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
         EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ASTUBaseCharacter::Move);
         EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASTUBaseCharacter::Look);
+        EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &ASTUBaseCharacter::OnBeginSprint);
+        EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &ASTUBaseCharacter::OnEndSprint);
     }
 }
 
 void ASTUBaseCharacter::Move(const FInputActionValue& Value)
 {
     const FVector2D MovementVector = Value.Get<FVector2D>();
-
+    if(MovementVector.IsZero()) return;
+    bIsMovingForward = MovementVector.Y > 0.f;
     if (Controller != nullptr)
     {
         const FRotator Rotation = Controller->GetControlRotation();
@@ -72,4 +80,30 @@ void ASTUBaseCharacter::Look(const FInputActionValue& Value)
         AddControllerYawInput(LookAxisVector.X);
         AddControllerPitchInput(LookAxisVector.Y);
     }
+}
+
+void ASTUBaseCharacter::OnBeginSprint()
+{
+    bWantsToRun = true;
+}
+
+void ASTUBaseCharacter::OnEndSprint()
+{
+    bWantsToRun = false;
+}
+
+
+bool ASTUBaseCharacter::IsSprinting() const
+{
+    return bWantsToRun && bIsMovingForward && !GetVelocity().IsZero();
+}
+
+float ASTUBaseCharacter::GetMovementDirection() const
+{
+    if(GetVelocity().IsZero()) return 0.f;
+    const auto VelocityNormal = GetVelocity().GetSafeNormal();
+    const auto AngleBetween = FMath::Acos(FVector::DotProduct(GetActorForwardVector(), VelocityNormal));
+    const auto CrossProduct = FVector::CrossProduct(GetActorForwardVector(), VelocityNormal);
+    const auto Degrees = FMath::RadiansToDegrees(AngleBetween);
+    return  CrossProduct.IsZero() ? Degrees : Degrees * FMath::Sign(CrossProduct.Z);
 }
