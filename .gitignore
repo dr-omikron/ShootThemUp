@@ -6,4 +6,5 @@ DerivedDataCache/
 Intermediate/
 Saved/
 Binaries/
-_Build/
+_Builds/
+Build/
