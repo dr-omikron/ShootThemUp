@@ -4,8 +4,7 @@
 #include "GameFramework/Character.h"
 #include "STUBaseCharacter.generated.h"
 
-
-class ASTUBaseWeapon;
+class USTUWeaponComponent;
 class UTextRenderComponent;
 class USTUHeathComponent;
 class USpringArmComponent;
@@ -56,6 +55,9 @@ private:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
     UTextRenderComponent* HealthTextComponent;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
+    USTUWeaponComponent* WeaponComponent;
+
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
     UInputMappingContext* STUMappingContext;
 
@@ -71,6 +73,9 @@ private:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
     UInputAction* LookAction;
 
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+    UInputAction* FireAction;
+
     UPROPERTY(EditAnywhere, Category = "Damage", meta = (AllowPrivateAccess = "true"))
     FVector2D LandedDamageVelocity;
 
@@ -83,12 +88,8 @@ private:
     UPROPERTY(EditDefaultsOnly, Category = "Animation", meta = (AllowPrivateAccess = "true"))
     UAnimMontage* DeathAnimation;
 
-    UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
-    TSubclassOf<ASTUBaseWeapon> WeaponClass;
-
     bool bWantsToRun;
     bool bIsMovingForward;
 
     void OnDeath();
-    void SpawnWeapon() const;
 };

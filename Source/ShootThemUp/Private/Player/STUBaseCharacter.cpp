@@ -4,9 +4,9 @@
 #include "Engine/LocalPlayer.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "STUBaseWeapon.h"
 #include "STUCharacterMovementComponent.h"
 #include "STUHeathComponent.h"
+#include "STUWeaponComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "Engine/DamageEvents.h"
 #include "GameFramework/Controller.h"
@@ -27,11 +27,14 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjectInitializer
     SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("Spring Arm Component");
     SpringArmComponent->SetupAttachment(GetRootComponent());
     SpringArmComponent->bUsePawnControlRotation = true;
+    SpringArmComponent->SocketOffset = FVector(0.f, 100.f, 80.f);
     CameraComponent = CreateDefaultSubobject<UCameraComponent>("Camera Component");
     CameraComponent->SetupAttachment(SpringArmComponent);
     HeathComponent = CreateDefaultSubobject<USTUHeathComponent>("Heath Component");
     HealthTextComponent = CreateDefaultSubobject<UTextRenderComponent>("Health Text Component");
     HealthTextComponent->SetupAttachment(GetRootComponent());
+    HealthTextComponent->SetOwnerNoSee(true);
+    WeaponComponent = CreateDefaultSubobject<USTUWeaponComponent>("Weapon Component");
 }
 
 void ASTUBaseCharacter::BeginPlay()
@@ -44,7 +47,6 @@ void ASTUBaseCharacter::BeginPlay()
     HeathComponent->OnDeath.AddUObject(this, &ASTUBaseCharacter::OnDeath);
     HeathComponent->OnHealthChange.AddUObject(this, &ASTUBaseCharacter::OnHealthChanged);
     LandedDelegate.AddDynamic(this, &ASTUBaseCharacter::OnGroundLanded);
-    SpawnWeapon();
 }
 
 void ASTUBaseCharacter::Tick(float DeltaTime)
@@ -57,6 +59,7 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
     Super::SetupPlayerInputComponent(PlayerInputComponent);
 
     check(PlayerInputComponent);
+    check(WeaponComponent);
 
     if (const APlayerController* PlayerController = Cast<APlayerController>(GetController()))
     {
@@ -74,6 +77,7 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
         EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASTUBaseCharacter::Look);
         EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &ASTUBaseCharacter::OnBeginSprint);
         EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &ASTUBaseCharacter::OnEndSprint);
+        EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, WeaponComponent, &USTUWeaponComponent::Fire);
     }
 }
 
@@ -152,15 +156,5 @@ void ASTUBaseCharacter::OnDeath()
     if(Controller)
     {
         Controller->ChangeState(NAME_Spectating);
-    }
-}
-
-void ASTUBaseCharacter::SpawnWeapon()
-{
-    if(!GetWorld()) return;
-    if(const auto Weapon = GetWorld()->SpawnActor<ASTUBaseWeapon>(WeaponClass))
-    {
-        const FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, false);
-        Weapon->AttachToComponent(GetMesh(), AttachmentRules, "WeaponSocket");
     }
 }
