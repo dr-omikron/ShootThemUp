@@ -1,13 +1,14 @@
 
 #include "STUBaseWeapon.h"
-
+#include "Engine/DamageEvents.h"
 #include "GameFramework/Character.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseWeapon, All, All);
 
 ASTUBaseWeapon::ASTUBaseWeapon():
     MuzzleSocketName("MuzzleSocket"),
-    TraceMaxDistance(1500.f)
+    TraceMaxDistance(1500.f),
+    DamageAmount(10.f)
 {
     PrimaryActorTick.bCanEverTick = false;
     WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>("Weapon Mesh");
@@ -20,28 +21,9 @@ void ASTUBaseWeapon::BeginPlay()
     check(WeaponMesh);
 }
 
-void ASTUBaseWeapon::FireWeapon()
-{
-    MakeShot();
-}
-
-void ASTUBaseWeapon::MakeShot() const
-{
-    if(!GetWorld()) return;
-    FVector TraceStart, TraceEnd;
-    if(!GetTraceData(TraceStart, TraceEnd)) return;
-    FHitResult HitResult;
-    MakeHit(HitResult, TraceStart, TraceEnd);
-    if(HitResult.bBlockingHit)
-    {
-        DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.f, 0, 3.f);
-        DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.f, 24, FColor::Red, false, 5.f);
-    }
-    else
-    {
-        DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), TraceEnd, FColor::Red, false, 3.f, 0, 3.f);
-    }
-}
+void ASTUBaseWeapon::StartFireWeapon(){}
+void ASTUBaseWeapon::StopFireWeapon(){}
+void ASTUBaseWeapon::MakeShot(){}
 
 APlayerController* ASTUBaseWeapon::GetPlayerController() const
 {
@@ -80,4 +62,11 @@ void ASTUBaseWeapon::MakeHit(FHitResult& HitResult, const FVector& TraceStart, c
     FCollisionQueryParams CollisionParams;
     CollisionParams.AddIgnoredActor(GetOwner());
     GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, CollisionParams);
+}
+
+void ASTUBaseWeapon::MakeDamage(const FHitResult& HitResult)
+{
+    const auto DamagedActor = HitResult.GetActor();
+    if(!DamagedActor) return;
+    DamagedActor->TakeDamage(DamageAmount, FDamageEvent(), GetPlayerController(), this);
 }
