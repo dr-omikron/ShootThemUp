@@ -17,7 +17,7 @@ public:
 protected:
     virtual void MakeShot() override;
     virtual bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const override;
-    
+    void MakeDamage(const FHitResult& HitResult);
 private:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shoot Settings", meta = (AllowPrivateAccess = "true"))
     float TimeBetweenShots;
@@ -25,5 +25,8 @@ private:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shoot Settings", meta = (AllowPrivateAccess = "true"))
     float BulletSpread;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shoot Settings", meta = (AllowPrivateAccess = "true"))
+    float DamageAmount;
+    
     FTimerHandle ShotTimerHandle;
 };

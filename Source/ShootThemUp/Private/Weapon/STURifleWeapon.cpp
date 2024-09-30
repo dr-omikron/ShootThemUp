@@ -1,10 +1,13 @@
 
 #include "Weapon/STURifleWeapon.h"
+#include "Engine/DamageEvents.h"
 
 ASTURifleWeapon::ASTURifleWeapon():
     TimeBetweenShots(0.1f),
-    BulletSpread(1.5f)
-{}
+    BulletSpread(1.5f),
+    DamageAmount(10.f)
+{
+}
 
 void ASTURifleWeapon::StartFireWeapon()
 {
@@ -50,4 +53,11 @@ bool ASTURifleWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
     const FVector ShootDirection = FMath::VRandCone(ViewRotation.Vector(), HalfRad) ;
     TraceEnd = TraceStart + ShootDirection * GetTraceMaxDistance();
     return true;
+}
+
+void ASTURifleWeapon::MakeDamage(const FHitResult& HitResult)
+{
+    const auto DamagedActor = HitResult.GetActor();
+    if(!DamagedActor) return;
+    DamagedActor->TakeDamage(DamageAmount, FDamageEvent(), GetPlayerController(), this);
 }
