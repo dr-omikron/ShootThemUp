@@ -76,6 +76,9 @@ private:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
     UInputAction* FireAction;
 
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+    UInputAction* NextWeaponAction;
+
     UPROPERTY(EditAnywhere, Category = "Damage", meta = (AllowPrivateAccess = "true"))
     FVector2D LandedDamageVelocity;
 
