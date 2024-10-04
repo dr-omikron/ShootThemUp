@@ -1,0 +1,3 @@
+
+#include "STUEquipFinishedNotify.h"
+

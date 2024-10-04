@@ -12,8 +12,8 @@ ASTURifleWeapon::ASTURifleWeapon():
 void ASTURifleWeapon::StartFireWeapon()
 {
     Super::StartFireWeapon();
-    MakeShot();
     GetWorldTimerManager().SetTimer(ShotTimerHandle, this, &ASTURifleWeapon::MakeShot, TimeBetweenShots, true);
+    MakeShot();
 }
 
 void ASTURifleWeapon::StopFireWeapon()
@@ -25,9 +25,17 @@ void ASTURifleWeapon::StopFireWeapon()
 void ASTURifleWeapon::MakeShot()
 {
     Super::MakeShot();
-    if(!GetWorld()) return;
+    if(!GetWorld() || IsAmmoEmpty())
+    {
+        StopFireWeapon();
+        return;
+    }
     FVector TraceStart, TraceEnd;
-    if(!GetTraceData(TraceStart, TraceEnd)) return;
+    if(!GetTraceData(TraceStart, TraceEnd))
+    {
+        StopFireWeapon();
+        return;
+    }
     FHitResult HitResult;
     MakeHit(HitResult, TraceStart, TraceEnd);
     if(HitResult.bBlockingHit)
@@ -40,6 +48,7 @@ void ASTURifleWeapon::MakeShot()
     {
         DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), TraceEnd, FColor::Red, false, 3.f, 0, 3.f);
     }
+    DecreaseAmmo();
 }
 
 bool ASTURifleWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
