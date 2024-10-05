@@ -11,12 +11,12 @@ USTUHeathComponent::USTUHeathComponent():
     Health(0.f)
 {
     PrimaryComponentTick.bCanEverTick = false;
-
 }
 
 void USTUHeathComponent::BeginPlay()
 {
     Super::BeginPlay();
+    check(MaxHeath > 0);
     SetHealth(MaxHeath);
     if(AActor* ComponentOwner = GetOwner())
     {

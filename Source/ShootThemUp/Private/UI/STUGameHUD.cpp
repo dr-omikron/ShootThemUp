@@ -1,6 +1,17 @@
 
 #include "STUGameHUD.h"
+
+#include "Blueprint/UserWidget.h"
 #include "Engine/Canvas.h"
+
+void ASTUGameHUD::BeginPlay()
+{
+    Super::BeginPlay();
+    if(const auto PlayerHUDWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDWidgetClass))
+    {
+        PlayerHUDWidget->AddToViewport();
+    }
+}
 
 void ASTUGameHUD::DrawHUD()
 {
