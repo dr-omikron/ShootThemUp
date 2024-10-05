@@ -26,7 +26,8 @@ public class ShootThemUp : ModuleRules
 			"ShootThemUp/Public/Development",
 			"ShootThemUp/Public/Weapon",
 			"ShootThemUp/Public/UI",
-			"ShootThemUp/Public/Animations"
+			"ShootThemUp/Public/Animations",
+			"ShootThemUp/Public/Pickups"
 		});
 	}
 }

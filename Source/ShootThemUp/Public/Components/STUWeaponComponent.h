@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "STUAmmoPickup.h"
 #include "STUCoreTypes.h"
 #include "Components/ActorComponent.h"
 #include "STUWeaponComponent.generated.h"
@@ -23,6 +24,7 @@ public:
     void ReloadWeapon();
     bool GetCurrentWeaponUIData(FWeaponUIData& UIData) const;
     bool GetCurrentWeaponAmmoData(FAmmoData& AmmoData) const;
+    bool TryToAddAmmo(const TSubclassOf<ASTUBaseWeapon>& WeaponType, int32 ClipsAmount);
 
 protected:
     virtual void BeginPlay() override;
@@ -64,6 +66,6 @@ private:
     bool CanFire() const;
     bool CanEquip() const;
     bool CanReload() const;
-    void OnEmptyClip();
+    void OnEmptyClip(ASTUBaseWeapon* EmptyWeapon);
     void ChangeClip();
 };

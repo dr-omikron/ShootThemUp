@@ -20,6 +20,7 @@ public:
     FORCEINLINE FAmmoData GetAmmoData() const { return CurrentAmmo; }
     void ChangeClip();
     bool CanReload() const;
+    bool TryToAddAmmo(int32 ClipsAmount);
     FOnClipEmptySignature OnClipEmpty;
 
 protected:
@@ -33,7 +34,8 @@ protected:
     void DecreaseAmmo();
     bool IsAmmoEmpty();
     bool IsClipEmpty() const;
-    void LogAmmo();
+    bool IsAmmoFull() const;
+    void LogAmmo() const;
 
 private:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
