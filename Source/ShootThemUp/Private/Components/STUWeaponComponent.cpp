@@ -189,3 +189,11 @@ void USTUWeaponComponent::ChangeClip()
     bReloadAnimInProgress = true;
     PlayAnimMontage(CurrentReloadAnimMontage);
 }
+
+
+bool USTUWeaponComponent::GetWeaponUIData(FWeaponUIData& UIData) const
+{
+    if(!CurrentWeapon) return false;
+    UIData = CurrentWeapon->GetUIData();
+    return true;
+}

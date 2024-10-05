@@ -16,6 +16,7 @@ public:
     virtual void StartFireWeapon();
     virtual void StopFireWeapon();
     FORCEINLINE float GetTraceMaxDistance() const { return TraceMaxDistance; }
+    FORCEINLINE FWeaponUIData GetUIData() const { return UIData; }
     void ChangeClip();
     bool CanReload() const;
     FOnClipEmptySignature OnClipEmpty;
@@ -42,6 +43,9 @@ private:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shoot Settings", meta = (AllowPrivateAccess = "true"))
     float TraceMaxDistance;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI", meta = (AllowPrivateAccess = "true"))
+    FWeaponUIData UIData;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
     FAmmoData DefaultAmmo;

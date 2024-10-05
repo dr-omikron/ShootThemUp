@@ -21,6 +21,7 @@ public:
     void StopFire();
     void NextWeapon();
     void ReloadWeapon();
+    bool GetWeaponUIData(FWeaponUIData& UIData) const;
 
 protected:
     virtual void BeginPlay() override;
