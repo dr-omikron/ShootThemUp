@@ -74,7 +74,6 @@ void ASTUBaseWeapon::DecreaseAmmo()
         return;
     }
     CurrentAmmo.Bullets--;
-    LogAmmo();
     if(IsClipEmpty() && !IsAmmoEmpty())
     {
         StopFireWeapon();
@@ -104,7 +103,6 @@ void ASTUBaseWeapon::ChangeClip()
         CurrentAmmo.Clips--;
     }
     CurrentAmmo.Bullets = DefaultAmmo.Bullets;
-    UE_LOG(LogBaseWeapon, Display, TEXT("---------Change Clip---------"));
 }
 
 bool ASTUBaseWeapon::CanReload() const

@@ -17,6 +17,7 @@ public:
     virtual void StopFireWeapon();
     FORCEINLINE float GetTraceMaxDistance() const { return TraceMaxDistance; }
     FORCEINLINE FWeaponUIData GetUIData() const { return UIData; }
+    FORCEINLINE FAmmoData GetAmmoData() const { return CurrentAmmo; }
     void ChangeClip();
     bool CanReload() const;
     FOnClipEmptySignature OnClipEmpty;
