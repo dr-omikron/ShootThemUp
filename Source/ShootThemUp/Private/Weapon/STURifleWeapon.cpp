@@ -1,5 +1,7 @@
 
 #include "Weapon/STURifleWeapon.h"
+
+#include "STUWeaponFXComponent.h"
 #include "Engine/DamageEvents.h"
 
 ASTURifleWeapon::ASTURifleWeapon():
@@ -7,6 +9,13 @@ ASTURifleWeapon::ASTURifleWeapon():
     BulletSpread(1.5f),
     DamageAmount(10.f)
 {
+    WeaponFXComponent = CreateDefaultSubobject<USTUWeaponFXComponent>("FX Component");
+}
+
+void ASTURifleWeapon::BeginPlay()
+{
+    Super::BeginPlay();
+    check(WeaponFXComponent);
 }
 
 void ASTURifleWeapon::StartFireWeapon()
@@ -41,8 +50,9 @@ void ASTURifleWeapon::MakeShot()
     if(HitResult.bBlockingHit)
     {
         MakeDamage(HitResult);
-        DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.f, 0, 3.f);
-        DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.f, 24, FColor::Red, false, 5.f);
+        //DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.f, 0, 3.f);
+        //DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.f, 24, FColor::Red, false, 5.f);
+        WeaponFXComponent->PlayImpactFX(HitResult);
     }
     else
     {

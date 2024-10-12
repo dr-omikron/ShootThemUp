@@ -5,12 +5,15 @@
 #include "Weapon/STUBaseWeapon.h"
 #include "STURifleWeapon.generated.h"
 
+class USTUWeaponFXComponent;
+
 UCLASS()
 class SHOOTTHEMUP_API ASTURifleWeapon : public ASTUBaseWeapon
 {
     GENERATED_BODY()
 public:
     ASTURifleWeapon();
+    virtual void BeginPlay() override;
     virtual void StartFireWeapon() override;
     virtual void StopFireWeapon() override;
     
@@ -27,6 +30,9 @@ private:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shoot Settings", meta = (AllowPrivateAccess = "true"))
     float DamageAmount;
+
+    UPROPERTY(VisibleAnywhere, Category = "VFX", meta = (AllowPrivateAccess = "true"))
+    USTUWeaponFXComponent* WeaponFXComponent;
     
     FTimerHandle ShotTimerHandle;
 };
