@@ -1,13 +1,16 @@
 
 #include "Weapon/STURifleWeapon.h"
 
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 #include "STUWeaponFXComponent.h"
 #include "Engine/DamageEvents.h"
 
 ASTURifleWeapon::ASTURifleWeapon():
     TimeBetweenShots(0.1f),
     BulletSpread(1.5f),
-    DamageAmount(10.f)
+    DamageAmount(10.f),
+    TraceTargetName("TraceTarget")
 {
     WeaponFXComponent = CreateDefaultSubobject<USTUWeaponFXComponent>("FX Component");
 }
@@ -47,12 +50,16 @@ void ASTURifleWeapon::MakeShot()
     }
     FHitResult HitResult;
     MakeHit(HitResult, TraceStart, TraceEnd);
+    FVector TraceFXEnd = TraceEnd;
     if(HitResult.bBlockingHit)
     {
         MakeDamage(HitResult);
+        TraceFXEnd = HitResult.ImpactPoint;
         WeaponFXComponent->PlayImpactFX(HitResult);
     }
+    SpawnTraceFX(GetMuzzleWorldLocation(), TraceFXEnd);
     DecreaseAmmo();
+    SpawnMuzzleFX();
 }
 
 bool ASTURifleWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
@@ -73,4 +80,12 @@ void ASTURifleWeapon::MakeDamage(const FHitResult& HitResult)
     const auto DamagedActor = HitResult.GetActor();
     if(!DamagedActor) return;
     DamagedActor->TakeDamage(DamageAmount, FDamageEvent(), GetPlayerController(), this);
+}
+
+void ASTURifleWeapon::SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd) const
+{
+    if(const auto TraceFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), TraceFX, TraceStart))
+    {
+        TraceFXComponent->SetVariableVec3(TraceTargetName, TraceEnd);
+    }
 }

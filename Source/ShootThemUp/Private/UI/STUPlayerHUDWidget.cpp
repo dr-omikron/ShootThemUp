@@ -4,6 +4,15 @@
 #include "STUUtils.h"
 #include "STUWeaponComponent.h"
 
+bool USTUPlayerHUDWidget::Initialize()
+{
+    if(const auto HealthComponent = STUUtils::GetSTUPlayerComponent<USTUHeathComponent>(GetOwningPlayerPawn()))
+    {
+        HealthComponent->OnHealthChange.AddUObject(this, &USTUPlayerHUDWidget::OnHealthChange);
+    }
+    return Super::Initialize();
+}
+
 float USTUPlayerHUDWidget::GetHealthPercent() const
 {
     if(const auto HealthComponent = STUUtils::GetSTUPlayerComponent<USTUHeathComponent>(GetOwningPlayerPawn()))
@@ -44,4 +53,12 @@ bool USTUPlayerHUDWidget::IsPlayerSpectating() const
 {
     const auto Controller = GetOwningPlayer();
     return Controller && Controller->GetStateName() == NAME_Spectating;
+}
+
+void USTUPlayerHUDWidget::OnHealthChange(float Health, float HealthDelta)
+{
+    if(HealthDelta < 0.f)
+    {
+        OnTakeDamage();
+    }
 }

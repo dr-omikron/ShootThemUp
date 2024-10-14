@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "NiagaraCommon.h"
 #include "STUCoreTypes.h"
 #include "GameFramework/Actor.h"
 #include "STUBaseWeapon.generated.h"
@@ -35,7 +36,10 @@ protected:
     bool IsAmmoEmpty();
     bool IsClipEmpty() const;
     bool IsAmmoFull() const;
-    void LogAmmo() const;
+    void SpawnMuzzleFX() const;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX")
+    UNiagaraSystem* MuzzleFX;
 
 private:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))

@@ -1,5 +1,6 @@
 
 #include "STUBaseWeapon.h"
+#include "NiagaraFunctionLibrary.h"
 #include "GameFramework/Character.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseWeapon, All, All);
@@ -144,9 +145,12 @@ bool ASTUBaseWeapon::TryToAddAmmo(const int32 ClipsAmount)
     return true;
 }
 
-void ASTUBaseWeapon::LogAmmo() const
+void ASTUBaseWeapon::SpawnMuzzleFX() const
 {
-    FString AmmoInfo = "Ammo: " + FString::FromInt(CurrentAmmo.Bullets) + " / ";
-    AmmoInfo += CurrentAmmo.bInfinite ? "Infinite" : FString::FromInt(CurrentAmmo.Clips);
-    UE_LOG(LogBaseWeapon, Display, TEXT("%s"), *AmmoInfo);
+     UNiagaraFunctionLibrary::SpawnSystemAttached(MuzzleFX,
+        WeaponMesh,
+        MuzzleSocketName,
+        FVector::ZeroVector,
+        FRotator::ZeroRotator,
+        EAttachLocation::SnapToTarget, true);
 }

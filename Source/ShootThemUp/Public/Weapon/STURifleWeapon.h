@@ -21,6 +21,11 @@ protected:
     virtual void MakeShot() override;
     virtual bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const override;
     void MakeDamage(const FHitResult& HitResult);
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX")
+    UNiagaraSystem* TraceFX;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX")
+    FName TraceTargetName;
+
 private:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shoot Settings", meta = (AllowPrivateAccess = "true"))
     float TimeBetweenShots;
@@ -33,6 +38,7 @@ private:
 
     UPROPERTY(VisibleAnywhere, Category = "VFX", meta = (AllowPrivateAccess = "true"))
     USTUWeaponFXComponent* WeaponFXComponent;
-    
+
+    void SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd) const;
     FTimerHandle ShotTimerHandle;
 };

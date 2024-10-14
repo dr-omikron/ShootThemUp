@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "STUCoreTypes.h"
-#include "STUHealthPickup.h"
 #include "Components/ActorComponent.h"
 #include "STUHeathComponent.generated.h"
 
@@ -51,10 +50,14 @@ private:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Heal", meta = (AllowPrivateAccess = "true"), meta = (EditCondition = "AutoHeal"))
     float HealModifier;
-    
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX", meta = (AllowPrivateAccess = "true"))
+    TSubclassOf<UCameraShakeBase> CameraShake;
+
     float Health;
     FTimerHandle HealTimerHandle;
 
     void HealUpdate();
     void SetHealth(float NewHealth);
+    void PlayCameraShake() const;
 };

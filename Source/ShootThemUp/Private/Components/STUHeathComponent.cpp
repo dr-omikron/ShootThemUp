@@ -1,7 +1,6 @@
 
 #include "STUHeathComponent.h"
-
-DEFINE_LOG_CATEGORY_STATIC(LogHealthComponent, All, All)
+#include "GameFramework/Pawn.h"
 
 USTUHeathComponent::USTUHeathComponent():
     MaxHeath(100.f), AutoHeal(true),
@@ -38,9 +37,9 @@ void USTUHeathComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, con
     {
         GetWorld()->GetTimerManager().SetTimer(HealTimerHandle, this, &USTUHeathComponent::HealUpdate, HealUpdateTime, true, HealDelay);
     }
+    PlayCameraShake();
 
     //Apply Damage Type Example:
-    
     /*UE_LOG(LogHealthComponent, Display, TEXT("Damage: %f"), Damage);
 
     if(DamageType)
@@ -58,8 +57,10 @@ void USTUHeathComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, con
 
 void USTUHeathComponent::SetHealth(const float NewHealth)
 {
-    Health = FMath::Clamp(NewHealth, 0.f, MaxHeath);
-    OnHealthChange.Broadcast(Health);
+    const float NextHealth = FMath::Clamp(NewHealth, 0.f, MaxHeath);
+    const float HealthDelta = NextHealth - Health;
+    Health = NextHealth;
+    OnHealthChange.Broadcast(Health, HealthDelta);
 }
 
 void USTUHeathComponent::HealUpdate()
@@ -81,4 +82,15 @@ bool USTUHeathComponent::TryToAddHealth(const float HealthAmount)
 bool USTUHeathComponent::IsHealthFull() const
 {
     return FMath::IsNearlyEqual(Health, MaxHeath);
+}
+
+
+void USTUHeathComponent::PlayCameraShake() const
+{
+    if(IsDead()) return;
+    const APawn* PlayerPawn = Cast<APawn>(GetOwner());
+    if(!PlayerPawn) return;
+    const auto Controller = PlayerPawn->GetController<APlayerController>();
+    if(!Controller || !Controller->PlayerCameraManager) return;
+    Controller->PlayerCameraManager->StartCameraShake(CameraShake);
 }

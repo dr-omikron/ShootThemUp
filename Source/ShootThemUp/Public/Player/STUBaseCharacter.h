@@ -31,7 +31,7 @@ public:
 
 protected:
     UFUNCTION()
-    void OnHealthChanged(float Health) const;
+    void OnHealthChanged(float Health, float HealthDelta) const;
     
     UFUNCTION()
     void OnGroundLanded(const FHitResult& Hit);
