@@ -23,6 +23,7 @@ public:
     bool CanReload() const;
     bool TryToAddAmmo(int32 ClipsAmount);
     FOnClipEmptySignature OnClipEmpty;
+    bool IsAmmoEmpty();
 
 protected:
     virtual void BeginPlay() override;
@@ -33,7 +34,6 @@ protected:
     FVector GetMuzzleWorldLocation() const;
     void MakeHit(FHitResult& HitResult, const FVector& TraceStart, const FVector& TraceEnd) const;
     void DecreaseAmmo();
-    bool IsAmmoEmpty();
     bool IsClipEmpty() const;
     bool IsAmmoFull() const;
     void SpawnMuzzleFX() const;

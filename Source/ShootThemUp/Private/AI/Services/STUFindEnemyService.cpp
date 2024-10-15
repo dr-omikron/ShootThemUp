@@ -1,5 +1,4 @@
 #include "AI/Services/STUFindEnemyService.h"
-
 #include "AIController.h"
 #include "STUAIPerceptionComponent.h"
 #include "STUUtils.h"

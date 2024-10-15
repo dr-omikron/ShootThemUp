@@ -15,4 +15,6 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
     UBehaviorTree* BehaviorTreeAsset;
+
+    virtual void OnDeath() override;
 };

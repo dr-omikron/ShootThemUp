@@ -41,6 +41,7 @@ protected:
     void Look(const FInputActionValue& Value);
     void OnBeginSprint();
     void OnEndSprint();
+    virtual void OnDeath();
 
 private:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
@@ -96,6 +97,4 @@ private:
 
     bool bWantsToRun;
     bool bIsMovingForward;
-
-    void OnDeath();
 };
