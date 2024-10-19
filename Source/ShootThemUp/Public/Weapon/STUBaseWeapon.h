@@ -24,6 +24,7 @@ public:
     bool TryToAddAmmo(int32 ClipsAmount);
     FOnClipEmptySignature OnClipEmpty;
     bool IsAmmoEmpty();
+    bool IsAmmoFull() const;
 
 protected:
     virtual void BeginPlay() override;
@@ -35,7 +36,6 @@ protected:
     void MakeHit(FHitResult& HitResult, const FVector& TraceStart, const FVector& TraceEnd) const;
     void DecreaseAmmo();
     bool IsClipEmpty() const;
-    bool IsAmmoFull() const;
     void SpawnMuzzleFX() const;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX")

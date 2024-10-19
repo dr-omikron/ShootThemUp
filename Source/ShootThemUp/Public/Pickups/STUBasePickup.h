@@ -14,6 +14,7 @@ class SHOOTTHEMUP_API ASTUBasePickup : public AActor
 public:
     ASTUBasePickup();
     virtual void Tick(float DeltaTime) override;
+    bool CouldBeTaken() const;
 
 protected:
     virtual void BeginPlay() override;
@@ -27,6 +28,7 @@ private:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pickup", meta = (AllowPrivateAccess = "true"))
     float RespawnTime;
 
+    FTimerHandle RespawnTimerHandle;
     float RotationYaw = 0.f;
 
     void PickupWasTaken();

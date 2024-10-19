@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "STUAmmoPickup.h"
 #include "STUCoreTypes.h"
+#include "STUNeedAmmoDecorator.h"
 #include "Components/ActorComponent.h"
 #include "STUWeaponComponent.generated.h"
 
@@ -25,6 +26,7 @@ public:
     bool GetCurrentWeaponUIData(FWeaponUIData& UIData) const;
     bool GetCurrentWeaponAmmoData(FAmmoData& AmmoData) const;
     bool TryToAddAmmo(const TSubclassOf<ASTUBaseWeapon>& WeaponType, int32 ClipsAmount);
+    bool NeedAmmo(const TSubclassOf<ASTUBaseWeapon>& WeaponType);
 
 protected:
     virtual void BeginPlay() override;
