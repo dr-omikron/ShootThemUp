@@ -1,5 +1,7 @@
 
 #include "STUHeathComponent.h"
+
+#include "STUGameModeBase.h"
 #include "GameFramework/Pawn.h"
 
 USTUHeathComponent::USTUHeathComponent():
@@ -31,6 +33,7 @@ void USTUHeathComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, con
     GetWorld()->GetTimerManager().ClearTimer(HealTimerHandle);
     if(IsDead())
     {
+        Killed(InstigatedBy);
         OnDeath.Broadcast();
     }
     else if(AutoHeal)
@@ -93,4 +96,14 @@ void USTUHeathComponent::PlayCameraShake() const
     const auto Controller = PlayerPawn->GetController<APlayerController>();
     if(!Controller || !Controller->PlayerCameraManager) return;
     Controller->PlayerCameraManager->StartCameraShake(CameraShake);
+}
+
+void USTUHeathComponent::Killed(const AController* KillerController) const
+{
+    if(!GetWorld()) return;
+    const auto GameMode = Cast<ASTUGameModeBase>(GetWorld()->GetAuthGameMode());
+    if(!GameMode) return;
+    const auto Player = Cast<APawn>(GetOwner());
+    const auto VictimController = Player ? Player->Controller : nullptr;
+    GameMode->Killed(KillerController, VictimController);
 }

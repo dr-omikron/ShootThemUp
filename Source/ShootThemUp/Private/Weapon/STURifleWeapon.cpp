@@ -7,10 +7,10 @@
 #include "Engine/DamageEvents.h"
 
 ASTURifleWeapon::ASTURifleWeapon():
+    TraceTargetName("TraceTarget"),
     TimeBetweenShots(0.1f),
     BulletSpread(1.5f),
-    DamageAmount(10.f),
-    TraceTargetName("TraceTarget")
+    DamageAmount(10.f)
 {
     WeaponFXComponent = CreateDefaultSubobject<USTUWeaponFXComponent>("FX Component");
 }
@@ -79,7 +79,7 @@ void ASTURifleWeapon::MakeDamage(const FHitResult& HitResult)
 {
     const auto DamagedActor = HitResult.GetActor();
     if(!DamagedActor) return;
-    DamagedActor->TakeDamage(DamageAmount, FDamageEvent(), GetPlayerController(), this);
+    DamagedActor->TakeDamage(DamageAmount, FDamageEvent(), GetController(), this);
 }
 
 void ASTURifleWeapon::SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd) const
@@ -88,4 +88,10 @@ void ASTURifleWeapon::SpawnTraceFX(const FVector& TraceStart, const FVector& Tra
     {
         TraceFXComponent->SetVariableVec3(TraceTargetName, TraceEnd);
     }
+}
+
+AController* ASTURifleWeapon::GetController() const
+{
+    const auto Pawn = Cast<APawn>(GetOwner());
+    return Pawn ? Pawn->GetController() : nullptr;
 }

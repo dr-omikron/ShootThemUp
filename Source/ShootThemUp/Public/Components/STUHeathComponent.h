@@ -60,4 +60,5 @@ private:
     void HealUpdate();
     void SetHealth(float NewHealth);
     void PlayCameraShake() const;
+    void Killed(const AController* KillerController) const;
 };

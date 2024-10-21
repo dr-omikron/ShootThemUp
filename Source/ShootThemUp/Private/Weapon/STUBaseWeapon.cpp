@@ -28,22 +28,15 @@ void ASTUBaseWeapon::StartFireWeapon(){}
 void ASTUBaseWeapon::StopFireWeapon(){}
 void ASTUBaseWeapon::MakeShot(){}
 
-APlayerController* ASTUBaseWeapon::GetPlayerController() const
-{
-    const auto Player = Cast<ACharacter>(GetOwner());
-    if(!Player) return nullptr;
-    return Player->GetController<APlayerController>();
-}
-
 bool ASTUBaseWeapon::GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const
 {
     const auto Character = Cast<ACharacter>(GetOwner());
     if(!Character) return false;
     if(Character->IsPlayerControlled())
     {
-        const auto Controller = GetPlayerController();
+        const auto Controller = Character->GetController<APlayerController>();;
         if(!Controller) return false;
-        GetPlayerController()->GetPlayerViewPoint(ViewLocation, ViewRotation);
+        Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
     }
     else
     {
