@@ -11,12 +11,12 @@ DEFINE_LOG_CATEGORY_STATIC(WeaponComponentLog, All, All);
 constexpr static int32 WeaponNumbers = 2;
 
 USTUWeaponComponent::USTUWeaponComponent():
+    CurrentWeapon(nullptr),
+    CurrentWeaponIndex(0),
     WeaponEquipSocketName("WeaponSocket"),
     WeaponArmorySocketName("ArmorySocket"),
     EquipAnimMontage(nullptr),
-    CurrentWeapon(nullptr),
     CurrentReloadAnimMontage(nullptr),
-    CurrentWeaponIndex(0),
     bEquipAnimInProgress(false),
     bReloadAnimInProgress(false)
 {

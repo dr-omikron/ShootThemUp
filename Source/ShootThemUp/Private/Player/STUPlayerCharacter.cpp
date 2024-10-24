@@ -1,7 +1,5 @@
 #include "Player/STUPlayerCharacter.h"
-#include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "STUWeaponComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -32,35 +30,6 @@ void ASTUPlayerCharacter::BeginPlay()
     check(CameraCollisionComponent);
     CameraCollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &ASTUPlayerCharacter::OnCameraCollisionBeginOverlap);
     CameraCollisionComponent->OnComponentEndOverlap.AddDynamic(this, &ASTUPlayerCharacter::OnCameraCollisionEndOverlap);
-}
-
-void ASTUPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-    Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-    check(PlayerInputComponent);
-
-    if (const APlayerController* PlayerController = Cast<APlayerController>(GetController()))
-    {
-        if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
-        {
-            Subsystem->AddMappingContext(STUMappingContext, 0);
-        }
-    }
-
-    if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
-    {
-        EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
-        EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
-        EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ASTUPlayerCharacter::Move);
-        EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASTUPlayerCharacter::Look);
-        EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &ASTUPlayerCharacter::OnBeginSprint);
-        EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &ASTUPlayerCharacter::OnEndSprint);
-        EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, GetWeaponComponent(), &USTUWeaponComponent::StartFire);
-        EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Completed, GetWeaponComponent(), &USTUWeaponComponent::StopFire);
-        EnhancedInputComponent->BindAction(NextWeaponAction, ETriggerEvent::Started, GetWeaponComponent(), &USTUWeaponComponent::NextWeapon);
-        EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Started, GetWeaponComponent(), &USTUWeaponComponent::ReloadWeapon);
-    }
 }
 
 void ASTUPlayerCharacter::Move(const FInputActionValue& Value)

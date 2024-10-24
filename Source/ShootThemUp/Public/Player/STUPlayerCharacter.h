@@ -14,7 +14,10 @@ class SHOOTTHEMUP_API ASTUPlayerCharacter : public ASTUBaseCharacter
     GENERATED_BODY()
 public:
     ASTUPlayerCharacter(const FObjectInitializer& ObjectInitializer);
-    virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+    void Move(const FInputActionValue& Value);
+    void Look(const FInputActionValue& Value);
+    void OnBeginSprint();
+    void OnEndSprint();
 
 protected:
     virtual bool IsSprinting() const override;
@@ -39,34 +42,6 @@ private:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
     USpringArmComponent* SpringArmComponent;
 
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-    UInputMappingContext* STUMappingContext;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-    UInputAction* JumpAction;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-    UInputAction* SprintAction;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-    UInputAction* MoveAction;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-    UInputAction* LookAction;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-    UInputAction* FireAction;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-    UInputAction* ReloadAction;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-    UInputAction* NextWeaponAction;
-    
-    void Move(const FInputActionValue& Value);
-    void Look(const FInputActionValue& Value);
-    void OnBeginSprint();
-    void OnEndSprint();
     void CheckCameraOverlap() const;
 
     bool bWantsToRun;

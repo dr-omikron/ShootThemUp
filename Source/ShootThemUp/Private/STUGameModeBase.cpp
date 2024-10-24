@@ -27,6 +27,7 @@ void ASTUGameModeBase::StartPlay()
     CreateTeamsInfo();
     CurrentRound = 1;
     StartRound();
+    SetMatchState(ESTUMatchState::InProgress);
 }
 
 UClass* ASTUGameModeBase::GetDefaultPawnClassForController_Implementation(AController* InController)
@@ -36,6 +37,26 @@ UClass* ASTUGameModeBase::GetDefaultPawnClassForController_Implementation(AContr
         return AIPawnClass;
     }
     return Super::GetDefaultPawnClassForController_Implementation(InController);
+}
+
+bool ASTUGameModeBase::SetPause(APlayerController* PC, FCanUnpause CanUnpauseDelegate)
+{
+    const auto PauseSet = Super::SetPause(PC, CanUnpauseDelegate);
+    if(PauseSet)
+    {
+        SetMatchState(ESTUMatchState::Pause);
+    }
+    return PauseSet;
+}
+
+bool ASTUGameModeBase::ClearPause()
+{
+    const auto PauseCleared = Super::ClearPause();
+    if(PauseCleared)
+    {
+        SetMatchState(ESTUMatchState::InProgress);
+    }
+    return PauseCleared;
 }
 
 void ASTUGameModeBase::SpawnBots()
@@ -106,6 +127,7 @@ void ASTUGameModeBase::CreateTeamsInfo()
         if(!PlayerState) continue;
         PlayerState->SetTeamID(TeamID);
         PlayerState->SetTeamColor(DeterminateColorByTeamID(TeamID));
+        PlayerState->SetPlayerName(Controller->IsPlayerController() ? "Player" : "Bot");
         SetPlayerColor(Controller);
         TeamID = TeamID == 1 ? 2 : 1;
     }
@@ -173,7 +195,7 @@ void ASTUGameModeBase::StartRespawn(AController* Controller) const
     RespawnComponent->Respawn(GameData.RespawnTime);
 }
 
-void ASTUGameModeBase::GameOver() const
+void ASTUGameModeBase::GameOver()
 {
     UE_LOG(LogSTUGameModeBase, Display, TEXT("=============== GAME OVER =============="))
     LogPlayerInfo();
@@ -185,4 +207,12 @@ void ASTUGameModeBase::GameOver() const
             Pawn->DisableInput(nullptr);
         }
     }
+    SetMatchState(ESTUMatchState::GameOver);
+}
+
+void ASTUGameModeBase::SetMatchState(const ESTUMatchState State)
+{
+    if(MatchState == State) return;
+    MatchState = State;
+    OnMatchStateChange.Broadcast(MatchState);
 }

@@ -14,8 +14,12 @@ class SHOOTTHEMUP_API ASTUGameModeBase : public AGameModeBase
 public:
     ASTUGameModeBase();
 
+    FOnMatchStateChangeSignature OnMatchStateChange;
+
     virtual void StartPlay() override;
     virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
+    virtual bool SetPause(APlayerController* PC, FCanUnpause CanUnpauseDelegate) override;
+    virtual bool ClearPause() override;
     void Killed(const AController* KillerController, AController* VictimController);
 
     FORCEINLINE FGameData GetGameData() const { return GameData; }
@@ -34,6 +38,7 @@ protected:
     FGameData GameData;
 
 private:
+    ESTUMatchState MatchState = ESTUMatchState::WaitingToStart;
     int32 CurrentRound = 1;
     int32 RoundCountDown = 0;
     FTimerHandle GameRoundTimerHandle;
@@ -48,5 +53,6 @@ private:
     void SetPlayerColor(const AController* Controller);
     void LogPlayerInfo() const;
     void StartRespawn(AController* Controller) const;
-    void GameOver() const;
+    void GameOver();
+    void SetMatchState(ESTUMatchState State);
 };
