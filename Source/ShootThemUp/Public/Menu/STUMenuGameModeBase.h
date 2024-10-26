@@ -9,4 +9,6 @@ class SHOOTTHEMUP_API ASTUMenuGameModeBase : public AGameModeBase
 {
     GENERATED_BODY()
 
+public:
+    ASTUMenuGameModeBase();
 };

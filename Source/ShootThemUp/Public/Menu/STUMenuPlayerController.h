@@ -9,4 +9,7 @@ class SHOOTTHEMUP_API ASTUMenuPlayerController : public APlayerController
 {
     GENERATED_BODY()
 
+protected:
+    virtual void BeginPlay() override;
+
 };
