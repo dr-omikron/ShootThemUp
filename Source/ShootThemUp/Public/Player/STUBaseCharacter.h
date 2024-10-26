@@ -30,7 +30,7 @@ public:
 
 protected:
     UFUNCTION()
-    void OnHealthChanged(float Health, float HealthDelta) const;
+    virtual void OnHealthChanged(float Health, float HealthDelta) const;
     
     UFUNCTION()
     void OnGroundLanded(const FHitResult& Hit);
@@ -38,10 +38,10 @@ protected:
     virtual void BeginPlay() override;
     virtual void OnDeath();
 
-private:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
     USTUHeathComponent* HeathComponent;
 
+private:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
     USTUWeaponComponent* WeaponComponent;
 
