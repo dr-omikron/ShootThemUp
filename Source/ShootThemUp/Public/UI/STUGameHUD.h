@@ -5,6 +5,8 @@
 #include "GameFramework/HUD.h"
 #include "STUGameHUD.generated.h"
 
+class USTUBaseWidget;
+
 UCLASS()
 class SHOOTTHEMUP_API ASTUGameHUD : public AHUD
 {
@@ -27,10 +29,10 @@ protected:
 
 private:
     UPROPERTY()
-    TMap<ESTUMatchState, UUserWidget*> GameWidgets;
+    TMap<ESTUMatchState, USTUBaseWidget*> GameWidgets;
 
     UPROPERTY()
-    UUserWidget* CurrentWidget = nullptr;
+    USTUBaseWidget* CurrentWidget = nullptr;
  
     void DrawCrosshair();
     void OnMatchStateChange(ESTUMatchState State);

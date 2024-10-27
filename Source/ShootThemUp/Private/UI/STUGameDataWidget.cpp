@@ -3,12 +3,6 @@
 #include "STUGameModeBase.h"
 #include "STUPlayerState.h"
 
-int32 USTUGameDataWidget::GetKillsNumber() const
-{
-    const auto PlayerState = GetSTUPlayerState();
-    return PlayerState ? PlayerState->GetKillsNumber() : 0;
-}
-
 int32 USTUGameDataWidget::GetCurrentRoundNumber() const
 {
     const auto GameMode = GetSTUGameMode();
