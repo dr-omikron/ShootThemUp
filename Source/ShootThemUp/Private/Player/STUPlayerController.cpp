@@ -2,10 +2,13 @@
 #include "EnhancedInputSubsystems.h"
 #include "STURespawnComponent.h"
 #include "EnhancedInputComponent.h"
+#include "STUGameInstance.h"
 #include "STUGameModeBase.h"
 #include "STUPlayerCharacter.h"
 #include "STUWeaponComponent.h"
 #include "GameFramework/GameModeBase.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogASTUPlayerController, All, All);
 
 ASTUPlayerController::ASTUPlayerController()
 {
@@ -55,6 +58,7 @@ void ASTUPlayerController::SetupInputComponent()
         EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, STUCharacter, &ASTUPlayerCharacter::Look);
         EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, STUCharacter, &ASTUPlayerCharacter::OnBeginSprint);
         EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, STUCharacter, &ASTUPlayerCharacter::OnEndSprint);
+        EnhancedInputComponent->BindAction(MuteAction, ETriggerEvent::Started, this, &ASTUPlayerController::OnToggleSound);
         EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, STUCharacter->GetWeaponComponent(), &USTUWeaponComponent::StartFire);
         EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Completed, STUCharacter->GetWeaponComponent(), &USTUWeaponComponent::StopFire);
         EnhancedInputComponent->BindAction(NextWeaponAction, ETriggerEvent::Started, STUCharacter->GetWeaponComponent(), &USTUWeaponComponent::NextWeapon);
@@ -80,4 +84,13 @@ void ASTUPlayerController::OnMatchStateChange(ESTUMatchState State)
         SetInputMode(FInputModeUIOnly());
         bShowMouseCursor = true;
     }
+}
+
+void ASTUPlayerController::OnToggleSound()
+{
+    if(!GetWorld()) return;
+    const auto GameInstance = GetWorld()->GetGameInstance<USTUGameInstance>();
+    if(!GameInstance) return;
+    GameInstance->ToggleVolume();
+    UE_LOG(LogASTUPlayerController, Display, TEXT("ToggleVolume"));
 }

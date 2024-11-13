@@ -85,6 +85,9 @@ struct FImpactData
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
     FDecalData DecalData;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SFX")
+    USoundCue* Sound = nullptr;
 };
 
 USTRUCT(BlueprintType)

@@ -59,4 +59,7 @@ private:
 
     UPROPERTY(EditDefaultsOnly, Category = "Animation", meta = (AllowPrivateAccess = "true"))
     UAnimMontage* DeathAnimation;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound", meta = (AllowPrivateAccess = "true"))
+    USoundCue* DeathSound;
 };

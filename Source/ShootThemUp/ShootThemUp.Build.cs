@@ -35,7 +35,8 @@ public class ShootThemUp : ModuleRules
 			"ShootThemUp/Public/AI/Tasks",
 			"ShootThemUp/Public/AI/EQS",
 			"ShootThemUp/Public/AI/Decorators",
-			"ShootThemUp/Public/Menu"
+			"ShootThemUp/Public/Menu",
+			"ShootThemUp/Public/Sound"
 		});
 	}
 }

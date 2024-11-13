@@ -21,6 +21,9 @@ protected:
     virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
     virtual bool GivePickupTo(APawn* PlayerPawn);
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sounds")
+    USoundBase* PickupTakenSound;
+
 private:
     UPROPERTY(VisibleAnywhere, Category = "Components", meta = (AllowPrivateAccess = "true"))
     USphereComponent* CollisionComponent;

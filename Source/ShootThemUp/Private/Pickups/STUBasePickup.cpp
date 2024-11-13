@@ -1,5 +1,6 @@
 #include "Pickups/STUBasePickup.h"
 #include "Components/SphereComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 ASTUBasePickup::ASTUBasePickup():
     RespawnTime(5.f)
@@ -46,6 +47,7 @@ void ASTUBasePickup::PickupWasTaken()
     if(!GetRootComponent()) return;
     GetRootComponent()->SetVisibility(false, true);
     GetWorldTimerManager().SetTimer(RespawnTimerHandle, this, &ASTUBasePickup::Respawn, RespawnTime);
+    UGameplayStatics::PlaySoundAtLocation(GetWorld(), PickupTakenSound, GetActorLocation());
 }
 
 void ASTUBasePickup::Respawn()

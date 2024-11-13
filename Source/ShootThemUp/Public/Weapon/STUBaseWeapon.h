@@ -40,13 +40,16 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX")
     UNiagaraSystem* MuzzleFX;
 
-private:
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
-    USkeletalMeshComponent* WeaponMesh;
-
-    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
     FName MuzzleSocketName;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+    USoundCue* FireSound;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+    USkeletalMeshComponent* WeaponMesh;
+
+private:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shoot Settings", meta = (AllowPrivateAccess = "true"))
     float TraceMaxDistance;
 

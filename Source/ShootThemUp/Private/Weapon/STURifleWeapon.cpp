@@ -36,7 +36,6 @@ void ASTURifleWeapon::StopFireWeapon()
 
 void ASTURifleWeapon::MakeShot()
 {
-    Super::MakeShot();
     if(!GetWorld() || IsAmmoEmpty())
     {
         StopFireWeapon();
@@ -60,6 +59,7 @@ void ASTURifleWeapon::MakeShot()
     SpawnTraceFX(GetMuzzleWorldLocation(), TraceFXEnd);
     DecreaseAmmo();
     SpawnMuzzleFX();
+    Super::MakeShot();
 }
 
 bool ASTURifleWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const

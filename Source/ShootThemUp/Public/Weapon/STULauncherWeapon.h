@@ -20,4 +20,7 @@ protected:
 private:
     UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
     TSubclassOf<ASTUProjectile> ProjectileClass;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound", meta = (AllowPrivateAccess = "true"))
+    USoundCue* NoAmmoSound;
 };

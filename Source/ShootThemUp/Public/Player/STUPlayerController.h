@@ -46,6 +46,9 @@ protected:
     UInputAction* PauseAction;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+    UInputAction* MuteAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
     UInputAction* NextWeaponAction;
 
     virtual void BeginPlay() override;
@@ -55,4 +58,5 @@ protected:
 private:
     void OnPauseGame();
     void OnMatchStateChange(ESTUMatchState State);
+    void OnToggleSound();
 };
