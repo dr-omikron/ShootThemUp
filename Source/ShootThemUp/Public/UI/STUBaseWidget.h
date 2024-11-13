@@ -4,6 +4,8 @@
 #include "Blueprint/UserWidget.h"
 #include "STUBaseWidget.generated.h"
 
+class USoundCue;
+
 UCLASS()
 class SHOOTTHEMUP_API USTUBaseWidget : public UUserWidget
 {

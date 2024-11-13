@@ -8,6 +8,7 @@ class USTUWeaponComponent;
 class USTUHeathComponent;
 class UInputMappingContext;
 class UInputAction;
+class USoundCue;
 struct FInputActionValue;
 
 UCLASS()

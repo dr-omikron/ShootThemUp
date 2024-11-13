@@ -3,6 +3,7 @@
 
 class UNiagaraSystem;
 class ASTUBaseWeapon;
+class USoundCue;
 
 //Weapon
 

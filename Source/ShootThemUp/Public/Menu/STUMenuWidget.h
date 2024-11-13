@@ -10,6 +10,7 @@ class USTUGameInstance;
 class USTULevelItemWidget;
 class UHorizontalBox;
 class UButton;
+class USoundCue;
 
 UCLASS()
 class SHOOTTHEMUP_API USTUMenuWidget : public USTUBaseWidget

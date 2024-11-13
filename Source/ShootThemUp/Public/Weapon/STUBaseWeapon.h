@@ -7,6 +7,8 @@
 #include "GameFramework/Actor.h"
 #include "STUBaseWeapon.generated.h"
 
+class USoundCue;
+
 UCLASS()
 class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
 {
